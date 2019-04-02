@@ -19,6 +19,7 @@ Ambientes Frontend evoluem rapidamente nos dias de hoje, navegadores modernos j�
 ## Translations
 
 * [한국어](./README.ko-KR.md)
+* [正體中文](./README.zh-TW.md)
 * [简体中文](./README.zh-CN.md)
 * [Bahasa Melayu](./README-my.md)
 * [Bahasa Indonesia](./README-id.md)
@@ -31,6 +32,7 @@ Ambientes Frontend evoluem rapidamente nos dias de hoje, navegadores modernos j�
 * [Italiano](./README-it.md)
 * [Français](./README-fr.md)
 * [日本語](./README-ja.md)
+* [Polski](./README-pl.md)
 
 ## Query Selector
 
@@ -346,7 +348,7 @@ No lugar de seletores comuns como classe, id ou atributo podemos usar `document.
 
   + Altura da janela
 
-    ```jsc
+    ```js
     // window height
     $(window).height();
     // sem scrollbar, se comporta como jQuery

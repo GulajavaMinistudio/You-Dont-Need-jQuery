@@ -17,6 +17,7 @@
 ## Çeviriler
 
 * [한국어](./README.ko-KR.md)
+* [正體中文](./README.zh-TW.md)
 * [简体中文](./README.zh-CN.md)
 * [Bahasa Melayu](./README-my.md)
 * [Bahasa Indonesia](./README-id.md)
@@ -29,6 +30,7 @@
 * [Italiano](./README-it.md)
 * [Français](./README-fr.md)
 * [日本語](./README-ja.md)
+* [Polski](./README-pl.md)
 
 ## Sorgu seçiciler
 

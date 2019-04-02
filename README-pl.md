@@ -1,22 +1,22 @@
-## You Don't Need jQuery [![Build Status](https://travis-ci.org/oneuijs/You-Dont-Need-jQuery.svg)](https://travis-ci.org/oneuijs/You-Dont-Need-jQuery)
+## Nie Potrzebujesz jQuery [![Build Status](https://travis-ci.org/oneuijs/You-Dont-Need-jQuery.svg)](https://travis-ci.org/oneuijs/You-Dont-Need-jQuery)
 
-前端发展很快，现代浏览器原生 API 已经足够好用。我们并不需要为了操作 DOM、Event 等再学习一下 jQuery 的 API。同时由于 React、Angular、Vue 等框架的流行，直接操作 DOM 不再是好的模式，jQuery 使用场景大大减少。本项目总结了大部分 jQuery API 替代的方法，暂时只支持 IE10 以上浏览器。
+Środowiska frontendowe rozwijają się błyskawicznie, nowsze przeglądarki zaimplementowały już większą część API DOM/BOM, które są całkiem użyteczne. Nie musimy uczyć się jQuery od podstaw by manipulować modelem dokumentu lub obsługiwać zdarzenia. Tymczasem, dzięki coraz większej dominacji bibliotek frontendowych takich jak React, Angular czy Vue, obsługa DOM bezpośrednio staje się antywzorcem projektowym, a jQuery coraz bardziej traci na znaczeniu. Ten projekt pokazuje w jaki sposób można zastąpić większość metod jQuery korzystając z natywnej implementacji, ze wsparciem dla IE 10+.
 
-## 目录
+## Spis treści
 
-1. [Translations](#translations)
-1. [Query Selector](#query-selector)
-1. [CSS & Style](#css--style)
-1. [DOM Manipulation](#dom-manipulation)
+1. [Tłumaczenia](#tłumaczenia)
+1. [Wybór przez selektory](#wybór-przez-selektory)
+1. [CSS i styl](#css-i-styl)
+1. [Manipulacja DOM](#manipulacja-dom)
 1. [Ajax](#ajax)
-1. [Events](#events)
-1. [Utilities](#utilities)
-1. [Promises](#promises)
-1. [Animation](#animation)
-1. [Alternatives](#alternatives)
-1. [Browser Support](#browser-support)
+1. [Zdarzenia](#zdarzenia)
+1. [Funkcje użytkowe](#funkcje-użytkowe)
+1. [Obietnice](#obietnice)
+1. [Animacja](#animacja)
+1. [Alternatywy](#alternatywy)
+1. [Wsparcie przeglądarek](#wsparcie-przeglądarek)
 
-## Translations
+## Tłumaczenia
 
 * [한국어](./README.ko-KR.md)
 * [正體中文](./README.zh-TW.md)
@@ -34,126 +34,117 @@
 * [日本語](./README-ja.md)
 * [Polski](./README-pl.md)
 
-## Query Selector
+## Wybór przez Selektory
 
-常用的 class、id、属性 选择器都可以使用 `document.querySelector` 或 `document.querySelectorAll` 替代。区别是
-* `document.querySelector` 返回第一个匹配的 Element
-* `document.querySelectorAll` 返回所有匹配的 Element 组成的 NodeList。它可以通过 `[].slice.call()` 把它转成 Array
-* 如果匹配不到任何 Element，jQuery 返回空数组 `[]`，但 `document.querySelector` 返回 `null`，注意空指针异常。当找不到时，也可以使用 `||` 设置默认的值，如 `document.querySelectorAll(selector) || []`
+Zamiast korzystania z powszechnych selektorów takich jak klasa, id czy też atrybut, możemy użyć `document.querySelector` lub `document.querySelectorAll`. Różnica między nimi to:
+* `document.querySelector` zwraca pierwszy pasujący element
+* `document.querySelectorAll` zwraca wszystkie elementy jako NodeList. Może zostać przekształcony do tablicy przy użyciu `Array.prototype.slice.call(document.querySelectorAll(selector));`
+* Jeżeli żaden element nie został znaleziony, jQuery oraz `document.querySelectorAll` zwrócą `[]`, a `document.querySelector` zwróci `null`.
 
-> 注意：`document.querySelector` 和 `document.querySelectorAll` 性能很**差**。如果想提高性能，尽量使用 `document.getElementById`、`document.getElementsByClassName` 或 `document.getElementsByTagName`。
+> Uwaga: `document.querySelector` i `document.querySelectorAll` są dosyć **WOLNE**, staraj się używać `document.getElementById`, `document.getElementsByClassName` lub `document.getElementsByTagName` jeżeli chcesz zwiększyć wydajność.
 
-- [1.0](#1.0) <a name='1.0'></a> 选择器查询
+- [1.0](#1.0) <a name='1.0'></a> Wybór przez selektor
 
   ```js
   // jQuery
   $('selector');
 
-  // Native
+  // Natywnie
   document.querySelectorAll('selector');
   ```
 
-- [1.1](#1.1) <a name='1.1'></a> class 查询
+- [1.1](#1.1) <a name='1.1'></a> Wybór przez klasę
 
   ```js
   // jQuery
   $('.class');
 
-  // Native
+  // Natywnie
   document.querySelectorAll('.class');
 
-  // or
+  // lub
   document.getElementsByClassName('class');
   ```
 
-- [1.2](#1.2) <a name='1.2'></a> id 查询
+- [1.2](#1.2) <a name='1.2'></a> Wybór przez id
 
   ```js
   // jQuery
   $('#id');
 
-  // Native
+  // Natywnie
   document.querySelector('#id');
 
-  // or
+  // lub
   document.getElementById('id');
   ```
 
-- [1.3](#1.3) <a name='1.3'></a> 属性查询
+- [1.3](#1.3) <a name='1.3'></a> Wybór przez atrybut
 
   ```js
   // jQuery
   $('a[target=_blank]');
 
-  // Native
+  // Natywnie
   document.querySelectorAll('a[target=_blank]');
   ```
 
-- [1.4](#1.4) <a name='1.4'></a> 后代查询
+- [1.4](#1.4) <a name='1.4'></a> Wybór spośród potomków
 
   ```js
   // jQuery
   $el.find('li');
 
-  // Native
+  // Natywnie
   el.querySelectorAll('li');
   ```
 
-- [1.5](#1.5) <a name='1.5'></a> 兄弟及上下元素
+- [1.5](#1.5) <a name='1.5'></a> Rodzeństwo, Poprzednie/Następne elementy
 
-  + 兄弟元素
+  + Rodzeństwo
 
     ```js
     // jQuery
     $el.siblings();
 
-    // Native - latest, Edge13+
-    [...el.parentNode.children].filter((child) =>
-      child !== el
-    );
-    // Native (alternative) - latest, Edge13+
-    Array.from(el.parentNode.children).filter((child) =>
-      child !== el
-    );
-    // Native - IE10+
+    // Natywnie
     Array.prototype.filter.call(el.parentNode.children, (child) =>
       child !== el
     );
     ```
 
-  + 上一个元素
+  + Poprzednie elementy
 
     ```js
     // jQuery
     $el.prev();
 
-    // Native
+    // Natywnie
     el.previousElementSibling;
-
     ```
 
-  + 下一个元素
+  + Następne elementy
 
     ```js
-    // next
+    // jQuery
     $el.next();
 
-    // Native
+    // Natywnie
     el.nextElementSibling;
     ```
 
-- [1.6](#1.6) <a name='1.6'></a> Closest
+- [1.6](#1.6) <a name='1.6'></a> Najbliższy
 
-  Closest 获得匹配选择器的第一个祖先元素，从当前元素开始沿 DOM 树向上。
+  Zwraca pierwszy pasujący element przez podany selektor, sprawdzając kolejno elementy od bieżącego.
 
   ```js
   // jQuery
-  $el.closest(queryString);
+  $el.closest(selector);
 
-  // Native - Only latest, NO IE
+  // Natywnie - Tylko najnowsze, bez wsparcia w IE
   el.closest(selector);
 
-  // Native - IE10+
+  // Natywnie - IE10+
   function closest(el, selector) {
     const matchesSelector = el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector;
 
@@ -168,15 +159,15 @@
   }
   ```
 
-- [1.7](#1.7) <a name='1.7'></a> Parents Until
+- [1.7](#1.7) <a name='1.7'></a> Rodzice dopóki
 
-  获取当前每一个匹配元素集的祖先，不包括匹配元素的本身。
+  Zwraca potomków każdego elementu w bieżącym zbiorze pasujących elementów, aż do elementu dopasowanego przez selektor, węzeł DOM, lub obiekt jQuery.
 
   ```js
   // jQuery
   $el.parentsUntil(selector, filter);
 
-  // Native
+  // Natywnie
   function parentsUntil(el, selector, filter) {
     const result = [];
     const matchesSelector = el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector;
@@ -197,53 +188,53 @@
   }
   ```
 
-- [1.8](#1.8) <a name='1.8'></a> Form
+- [1.8](#1.8) <a name='1.8'></a> Formularze
 
-  + Input/Textarea
+  + Pola tekstowe
 
     ```js
     // jQuery
     $('#my-input').val();
 
-    // Native
+    // Natywnie
     document.querySelector('#my-input').value;
     ```
 
-  + 获取 e.currentTarget 在 `.radio` 中的数组索引
+  + Otrzymanie indeksu `e.currentTarget` wewnątrz elementów `.radio`
 
     ```js
     // jQuery
     $('.radio').index(e.currentTarget);
 
-    // Native
+    // Natywnie
     Array.prototype.indexOf.call(document.querySelectorAll('.radio'), e.currentTarget);
     ```
 
-- [1.9](#1.9) <a name='1.9'></a> Iframe Contents
+- [1.9](#1.9) <a name='1.9'></a> Zawartość ramek
 
-  jQuery 对象的 iframe `contents()` 返回的是 iframe 内的 `document`
+  `$('iframe').contents()` zwraca `contentDocument` tego iframe
 
-  + Iframe contents
+  + Zawartość ramki
 
     ```js
     // jQuery
     $iframe.contents();
 
-    // Native
+    // Natywnie
     iframe.contentDocument;
     ```
 
-  + Iframe Query
+  + Wybór elementu ramki
 
     ```js
     // jQuery
     $iframe.contents().find('.css');
 
-    // Native
+    // Natywnie
     iframe.contentDocument.querySelectorAll('.css');
     ```
 
-- [1.10](#1.10) <a name='1.10'></a> 获取 body
+- [1.10](#1.10) <a name='1.10'></a> Otrzymanie body
 
   ```js
   // jQuery
@@ -253,138 +244,139 @@
   document.body;
   ```
 
-- [1.11](#1.11) <a name='1.11'></a> 获取或设置属性
+- [1.11](#1.11) <a name='1.11'></a> Akcesory atrybutów
 
-  + 获取属性
+  + Otrzymanie wartości atrybutu
 
     ```js
     // jQuery
     $el.attr('foo');
 
-    // Native
+    // Natywnie
     el.getAttribute('foo');
     ```
-  + 设置属性
+  + Ustawienie wartości atrybutu
 
     ```js
-    // jQuery, note that this works in memory without change the DOM
+    // jQuery, działa w pamięci bez zmiany DOM
     $el.attr('foo', 'bar');
 
-    // Native
+    // Natywnie
     el.setAttribute('foo', 'bar');
     ```
 
-  + 获取 `data-` 属性
+  + Otrzymanie wartości atrybutu `data-`
 
     ```js
     // jQuery
     $el.data('foo');
 
-    // Native (use `getAttribute`)
+    // Natywnie (użycie `getAttribute`)
     el.getAttribute('data-foo');
 
-    // Native (use `dataset` if only need to support IE 11+)
+    // Natywnie (użycie `dataset` jeżeli wspierasz tylko przeglądarki IE 11+)
     el.dataset['foo'];
     ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ powrót](#spis-treści)**
 
-## CSS & Style
+## CSS i styl
 
 - [2.1](#2.1) <a name='2.1'></a> CSS
 
-  + Get style
+  + Otrzymanie stylu
 
     ```js
     // jQuery
-    $el.css("color");
+    $el.css('color');
 
-    // Native
-    // 注意：此处为了解决当 style 值为 auto 时，返回 auto 的问题
+    // Natywnie
+    // UWAGA: Znany bug, zwróci 'auto' jeżeli wartość style wynosi 'auto'
     const win = el.ownerDocument.defaultView;
 
-    // null 的意思是不返回伪类元素
+    // null oznacza, że nie zostaną zwrócone pseudostyle
     win.getComputedStyle(el, null).color;
     ```
 
-  + Set style
+  + Ustawienie stylu
 
     ```js
     // jQuery
-    $el.css({ color: "#ff0011" });
+    $el.css({ color: '#f01' });
 
-    // Native
-    el.style.color = '#ff0011';
+    // Natywnie
+    el.style.color = '#f01';
     ```
 
-  + Get/Set Styles
+  + Otrzymanie/Ustawienie stylów
 
-    注意，如果想一次设置多个 style，可以参考 oui-dom-utils 中 [setStyles](https://github.com/oneuijs/oui-dom-utils/blob/master/src/index.js#L194) 方法
+    Jeżeli chcesz ustawić wiele stylów jednocześnie, możesz odwołać się do metody [setStyles](https://github.com/oneuijs/oui-dom-utils/blob/master/src/index.js#L194) w pakiecie oui-dom-utils.
 
-  + Add class
+
+  + Dodanie klasy
 
     ```js
     // jQuery
     $el.addClass(className);
 
-    // Native
+    // Natywnie
     el.classList.add(className);
     ```
 
-  + Remove class
+  + Usunięcie klasy
 
     ```js
     // jQuery
     $el.removeClass(className);
 
-    // Native
+    // Natywnie
     el.classList.remove(className);
     ```
 
-  + has class
+  + Sprawdzenie czy element posiada klasę
 
     ```js
     // jQuery
     $el.hasClass(className);
 
-    // Native
+    // Natywnie
     el.classList.contains(className);
     ```
 
-  + Toggle class
+  + Przełączenie klasy
 
     ```js
     // jQuery
     $el.toggleClass(className);
 
-    // Native
+    // Natywnie
     el.classList.toggle(className);
     ```
 
-- [2.2](#2.2) <a name='2.2'></a> Width & Height
+- [2.2](#2.2) <a name='2.2'></a> Szerokość i wysokość
 
-  Width 与 Height 获取方法相同，下面以 Height 为例：
+  Manipulowanie szerokością i wysokością jest teoretycznie takie samo, dla przykładu użycie wysokości:
 
-  + Window height
+  + Wysokość okna
 
     ```js
     // window height
     $(window).height();
 
-    // 含 scrollbar
+    // z paskiem przewijania
     window.document.documentElement.clientHeight;
 
-    // 不含 scrollbar，与 jQuery 行为一致
+    // bez paska, działa jak jQuery
     window.innerHeight;
     ```
 
-  + Document height
+  + Wysokość dokumentu
 
     ```js
     // jQuery
     $(document).height();
 
-    // Native
+    // Natywnie
     const body = document.body;
     const html = document.documentElement;
     const height = Math.max(
@@ -396,15 +388,15 @@
     );
     ```
 
-  + Element height
+  + Wysokość elementu
 
     ```js
     // jQuery
     $el.height();
 
-    // Native
+    // Natywnie
     function getHeight(el) {
-      const styles = this.getComputedStyle(el);
+      const styles = window.getComputedStyle(el);
       const height = el.offsetHeight;
       const borderTopWidth = parseFloat(styles.borderTopWidth);
       const borderBottomWidth = parseFloat(styles.borderBottomWidth);
@@ -413,343 +405,310 @@
       return height - borderBottomWidth - borderTopWidth - paddingTop - paddingBottom;
     }
 
-    // 精确到整数（border-box 时为 height - border 值，content-box 时为 height + padding 值）
+    // dokładne do części całkowitej（jeżeli `border-box`, wtedy `height - border`; jeżeli `content-box`, wtedy `height + padding`）
     el.clientHeight;
 
-    // 精确到小数（border-box 时为 height 值，content-box 时为 height + padding + border 值）
+    // dokładne do części dziesiętnej（jeżeli `border-box`, wtedy `height`; jeżeli `content-box`, wtedy `height + padding + border`）
     el.getBoundingClientRect().height;
     ```
 
-- [2.3](#2.3) <a name='2.3'></a> Position & Offset
+- [2.3](#2.3) <a name='2.3'></a> Pozycja i przesunięcie
 
-  + Position
+  + Pozycja
 
-    获得匹配元素相对父元素的偏移
+    Otrzymanie bieżącej pozycji elementu relatywnie do przesunięcia rodzica.
 
     ```js
     // jQuery
     $el.position();
 
-    // Native
+    // Natywnie
     { left: el.offsetLeft, top: el.offsetTop }
     ```
 
-  + Offset
+  + Przesunięcie
 
-    获得匹配元素相对文档的偏移
+    Otrzymanie bieżącej pozycji elementu relatywnie do dokumentu.
 
     ```js
     // jQuery
     $el.offset();
 
-    // Native
+    // Natywnie
     function getOffset (el) {
       const box = el.getBoundingClientRect();
 
       return {
         top: box.top + window.pageYOffset - document.documentElement.clientTop,
         left: box.left + window.pageXOffset - document.documentElement.clientLeft
-      }
+      };
     }
     ```
 
-- [2.4](#2.4) <a name='2.4'></a> Scroll Top
+- [2.4](#2.4) <a name='2.4'></a> Przesunięcie widoku
 
-
-  获取元素滚动条垂直位置。
+  Otrzymanie bieżącego przesunięcia w pionie elementu.
 
   ```js
   // jQuery
   $(window).scrollTop();
 
-  // Native
+  // Natywnie
   (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
   ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ wróć](#spis-treści)**
 
-## DOM Manipulation
+## Manipulacja DOM
 
-- [3.1](#3.1) <a name='3.1'></a> Remove
+- [3.1](#3.1) <a name='3.1'></a> Usuwanie
 
-  从 DOM 中移除元素。
+  Usunięcie elementu z DOM.
 
   ```js
   // jQuery
   $el.remove();
 
-  // Native
+  // Natywnie
   el.parentNode.removeChild(el);
   ```
 
-- [3.2](#3.2) <a name='3.2'></a> Text
+- [3.2](#3.2) <a name='3.2'></a> Tekst
 
-  + Get text
+  + Otrzymanie tekstu
 
-    返回指定元素及其后代的文本内容。
+    Otrzymanie połączonej zawartości tekstowej elementu, włącznie z jego potomkami,
 
     ```js
     // jQuery
     $el.text();
 
-    // Native
+    // Natywnie
     el.textContent;
     ```
 
-  + Set text
+  + Ustawianie tekstu
 
-    设置元素的文本内容。
+    Ustawianie zawartości tekstowej elementu do wyznaczonej wartości.
 
     ```js
     // jQuery
     $el.text(string);
 
-    // Native
+    // Natywnie
     el.textContent = string;
     ```
 
 - [3.3](#3.3) <a name='3.3'></a> HTML
 
-  + Get HTML
+  + Otrzymanie HTML
 
     ```js
     // jQuery
     $el.html();
 
-    // Native
+    // Natywnie
     el.innerHTML;
     ```
 
-  + Set HTML
+  + Ustawianie HTML
 
     ```js
     // jQuery
     $el.html(htmlString);
 
-    // Native
+    // Natywnie
     el.innerHTML = htmlString;
     ```
 
-- [3.4](#3.4) <a name='3.4'></a> Append
+- [3.4](#3.4) <a name='3.4'></a> Dodawanie na koniec
 
-  Append 插入到子节点的末尾
+  Dodanie elementu jako dziecko po ostatnim dziecku elementu rodzica
 
   ```js
   // jQuery
-  $el.append("<div id='container'>hello</div>");
+  $el.append('<div id="container">Hello World</div>');
 
-  // Native (HTML string)
+  // Natywnie (tekst HTML)
   el.insertAdjacentHTML('beforeend', '<div id="container">Hello World</div>');
 
-  // Native (Element)
+  // Natywnie (Element)
   el.appendChild(newEl);
   ```
 
-- [3.5](#3.5) <a name='3.5'></a> Prepend
+- [3.5](#3.5) <a name='3.5'></a> Dodawanie na początek
 
   ```js
   // jQuery
-  $el.prepend("<div id='container'>hello</div>");
+  $el.prepend('<div id="container">Hello World</div>');
 
-  // Native (HTML string)
+  // Natywnie (tekst HTML)
   el.insertAdjacentHTML('afterbegin', '<div id="container">Hello World</div>');
 
-  // Native (Element)
+  // Natywnie (Element)
   el.insertBefore(newEl, el.firstChild);
   ```
 
-- [3.6](#3.6) <a name='3.6'></a> insertBefore
+- [3.6](#3.6) <a name='3.6'></a> Dodawanie przed
 
-  在选中元素前插入新节点
+  Dodanie nowego węzła przed wybranymi elementami
 
   ```js
   // jQuery
-  $newEl.insertBefore(queryString);
+  $newEl.insertBefore(selector);
 
-  // Native (HTML string)
+  // Natywnie (tekst HTML)
   el.insertAdjacentHTML('beforebegin ', '<div id="container">Hello World</div>');
 
-  // Native (Element)
+  // Natywnie (Element)
   const el = document.querySelector(selector);
   if (el.parentNode) {
     el.parentNode.insertBefore(newEl, el);
   }
   ```
 
-- [3.7](#3.7) <a name='3.7'></a> insertAfter
+- [3.7](#3.7) <a name='3.7'></a> Dodawanie po elemencie
 
-  在选中元素后插入新节点
+  Dodanie nowego węzła po wybranych elementach
 
   ```js
   // jQuery
-  $newEl.insertAfter(queryString);
+  $newEl.insertAfter(selector);
 
-  // Native (HTML string)
+  // Natywnie (tekst HTML)
   el.insertAdjacentHTML('afterend', '<div id="container">Hello World</div>');
 
-  // Native (Element)
+  // Natywnie (Element)
   const el = document.querySelector(selector);
   if (el.parentNode) {
     el.parentNode.insertBefore(newEl, el.nextSibling);
   }
   ```
 
-- [3.8](#3.8) <a name='3.8'></a> is
+- [3.8](#3.8) <a name='3.8'></a> Porównywanie
 
-  如果匹配给定的选择器，返回true
-
-    ```js
-    // jQuery
-    $el.is(selector);
-
-    // Native
-    el.matches(selector);
-    ```
-
-- [3.9](#3.9) <a name='3.9'></a> clone
-
-  深拷贝被选元素。（生成被选元素的副本，包含子节点、文本和属性。）
+  Zwraca `true` jeżeli podany selektor pasuje do wybranego elementu
 
   ```js
-  //jQuery
+  // jQuery - Zauważ, że `is` działa również z `function` lub `elements`, które nie są tutaj rozważane
+  $el.is(selector);
+
+  // Natywnie
+  el.matches(selector);
+  ```
+- [3.9](#3.9) <a name='3.9'></a> Kopiowanie
+
+  Tworzenie głębokiej kopii wybranego elementu
+
+  ```js
+  // jQuery
   $el.clone();
 
-  //Native
+  // Natywnie
   el.cloneNode();
 
-  //深拷贝添加参数‘true’
-  ```
+  // Żeby kopiować głęboko, należy ustawić parametr na `true`
+  ```
 
-- [3.10](#3.10) <a name='3.10'></a> empty
+- [3.10](#3.10) <a name='3.10'></a> Wyczyszczenie
 
-  移除所有子节点
+  Usuwa wszystkie węzły dzieci
 
-```js
-//jQuery
-$el.empty();
+  ```js
+  // jQuery
+  $el.empty();
 
-//Native
-el.innerHTML = '';
-```
+  // Natywnie
+  el.innerHTML = '';
+  ```
 
-- [3.11](#3.11) <a name='3.11'></a> wrap
+- [3.11](#3.11) <a name='3.11'></a> Zawinięcie
 
- 把每个被选元素放置在指定的HTML结构中。
+  Umieszczenie każdego elementu w strukturze HTML
 
- ```js
- //jQuery
- $(".inner").wrap('<div class="wrapper"></div>');
+  ```js
+  // jQuery
+  $('.inner').wrap('<div class="wrapper"></div>');
 
- //Native
- Array.prototype.forEach.call(document.querySelector('.inner'), (el) => {
+  // Natywnie
+  Array.prototype.forEach.call(document.querySelectorAll('.inner'), (el) => {
     const wrapper = document.createElement('div');
     wrapper.className = 'wrapper';
     el.parentNode.insertBefore(wrapper, el);
     el.parentNode.removeChild(el);
     wrapper.appendChild(el);
- });
+  });
+  ```
 
- ```
+- [3.12](#3.12) <a name='3.12'></a> Odwinięcie
 
-- [3.12](#3.12) <a name="3.12"></a> unwrap
-
-  移除被选元素的父元素的DOM结构
+  Usuwa rodziców z pasujących elementów z DOM
 
   ```js
   // jQuery
   $('.inner').unwrap();
 
-  // Native
+  // Natywnie
   Array.prototype.forEach.call(document.querySelectorAll('.inner'), (el) => {
-        let elParentNode = el.parentNode
-
-        if(elParentNode !== document.body) {
-            elParentNode.parentNode.insertBefore(el, elParentNode)
-            elParentNode.parentNode.removeChild(elParentNode)
-        }
+    Array.prototype.forEach.call(el.childNodes, (child) => {
+      el.parentNode.insertBefore(child, el);
+    });
+    el.parentNode.removeChild(el);
   });
   ```
 
-- [3.13](#3.13) <a name="3.13"></a> replaceWith
+- [3.13](#3.13) <a name='3.13'></a> Zamiana
 
-  用指定的元素替换被选的元素
+  Wymiana każdego elementu ze zbioru pasujących elementów na podaną nową zawartość
 
   ```js
-  //jQuery
+  // jQuery
   $('.inner').replaceWith('<div class="outer"></div>');
 
-  //Native
-  Array.prototype.forEach.call(document.querySelectorAll('.inner'),(el) => {
-    const outer = document.createElement("div");
-    outer.className = "outer";
+  // Natywnie
+  Array.prototype.forEach.call(document.querySelectorAll('.inner'), (el) => {
+    const outer = document.createElement('div');
+    outer.className = 'outer';
     el.parentNode.insertBefore(outer, el);
     el.parentNode.removeChild(el);
   });
   ```
 
-- [3.14](#3.14) <a name='3.14'></a> simple parse
 
-  解析 HTML/SVG/XML 字符串
-
-  ```js
-  // jQuery
-  $(`<ol>
-    <li>a</li>
-    <li>b</li>
-  </ol>
-  <ol>
-    <li>c</li>
-    <li>d</li>
-  </ol>`);
-
-  // Native
-  range = document.createRange();
-  parse = range.createContextualFragment.bind(range);
-
-  parse(`<ol>
-    <li>a</li>
-    <li>b</li>
-  </ol>
-  <ol>
-    <li>c</li>
-    <li>d</li>
-  </ol>`);
-  ```
-
-**[⬆ 回到顶部](#目录)**
+**[⬆ powrót](#spis-treści)**
 
 ## Ajax
 
-[Fetch API](https://fetch.spec.whatwg.org/) 是用于替换 XMLHttpRequest 处理 ajax 的新标准，Chrome 和 Firefox 均支持，旧浏览器可以使用 polyfills 提供支持。
+[Fetch API](https://fetch.spec.whatwg.org/) jest nowym standardem mającym zastąpić XMLHttpRequest by wykonować ajax. Obecnie działa na Chrome i Firefox, istnieje możliwość użycia tzw. polyfills (wypełnień) by móc używać tej funkcjonalności w starszych przeglądarkach.
 
-IE9+ 请使用 [github/fetch](http://github.com/github/fetch)，IE8+ 请使用 [fetch-ie8](https://github.com/camsong/fetch-ie8/)，JSONP 请使用 [fetch-jsonp](https://github.com/camsong/fetch-jsonp)。
+Wypróbuj [github/fetch](http://github.com/github/fetch) na IE9+ lub [fetch-ie8](https://github.com/camsong/fetch-ie8/) na IE8+, [fetch-jsonp](https://github.com/camsong/fetch-jsonp) by wykonywać żądania JSONP.
 
-- [4.1](#4.1) <a name='4.1'></a> 从服务器读取数据并替换匹配元素的内容。
+- [4.1](#4.1) <a name='4.1'></a> Ładowanie danych z serwera i umieszczenie zwróconego HTML do pasującego elementu
 
   ```js
   // jQuery
   $(selector).load(url, completeCallback)
 
-  // Native
+  // Natywnie
   fetch(url).then(data => data.text()).then(data => {
     document.querySelector(selector).innerHTML = data
   }).then(completeCallback)
   ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ powrót](#spis-treści)**
 
-## Events
+## Zdarzenia
 
-完整地替代命名空间和事件代理，链接到 https://github.com/oneuijs/oui-dom-events
+Dla pełnego zastąpienia ze wsparciem przestrzenią nazw i delegowaniem, odnieś się do https://github.com/oneuijs/oui-dom-events
 
-- [5.0](#5.0) <a name='5.0'></a> Document ready by `DOMContentLoaded`
+- [5.0](#5.0) <a name='5.0'></a> Dokument gotowy ze zdarzeniem `DOMContentLoaded`
 
   ```js
   // jQuery
   $(document).ready(eventHandler);
 
-  // Native
-  // 检测 DOMContentLoaded 是否已完成
+  // Natywnie
+  // Sprawdź czy zdarzenie DOMContentLoaded został zakończone
   if (document.readyState !== 'loading') {
     eventHandler();
   } else {
@@ -757,33 +716,33 @@ IE9+ 请使用 [github/fetch](http://github.com/github/fetch)，IE8+ 请使用 [
   }
   ```
 
-- [5.1](#5.1) <a name='5.1'></a> 使用 on 绑定事件
+- [5.1](#5.1) <a name='5.1'></a> Nasłuchiwanie funkcji na zdarzenie
 
   ```js
   // jQuery
   $el.on(eventName, eventHandler);
 
-  // Native
+  // Natywnie
   el.addEventListener(eventName, eventHandler);
   ```
 
-- [5.2](#5.2) <a name='5.2'></a> 使用 off 解绑事件
+- [5.2](#5.2) <a name='5.2'></a> Zatrzymanie nasłuchiwania
 
   ```js
   // jQuery
   $el.off(eventName, eventHandler);
 
-  // Native
+  // Natywnie
   el.removeEventListener(eventName, eventHandler);
   ```
 
-- [5.3](#5.3) <a name='5.3'></a> Trigger
+- [5.3](#5.3) <a name='5.3'></a> Wywołanie zdarzenia
 
   ```js
   // jQuery
   $(el).trigger('custom-event', {key1: 'data'});
 
-  // Native
+  // Natywnie
   if (window.CustomEvent) {
     const event = new CustomEvent('custom-event', {detail: {key1: 'data'}});
   } else {
@@ -794,35 +753,35 @@ IE9+ 请使用 [github/fetch](http://github.com/github/fetch)，IE8+ 请使用 [
   el.dispatchEvent(event);
   ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ powrót](#spis-treści)**
 
-## Utilities
+## Funkcje użytkowe
 
-大部分实用工具都能在 native API 中找到. 其他高级功能可以选用专注于该领域的稳定性和性能都更好的库来代替，推荐 [lodash](https://lodash.com)。
+Większość funkcji użytkowych można znaleźć w natywnym API. Pozostałe, bardziej zaawansowane funkcje mogą zostać zastąpione lepszymi bibliotekami użytkowymi, które skupiają się na spójności i wydajności. Rekomendowaną biblioteką jest [lodash](https://lodash.com).
 
-- [6.1](#6.1) <a name='6.1'></a> 基本工具
+- [6.1](#6.1) <a name='6.1'></a> Podstawowe funkcje użytkowe
 
   + isArray
 
-  检测参数是不是数组。
+  Sprawdza czy podany argument jest tablicą.
 
   ```js
   // jQuery
-  $.isArray(range);
+  $.isArray(array);
 
-  // Native
-  Array.isArray(range);
+  // Natywnie
+  Array.isArray(array);
   ```
 
   + isWindow
 
-  检测参数是不是 window。
+  Sprawdza czy podany argument jest oknem.
 
   ```js
   // jQuery
   $.isWindow(obj);
 
-  // Native
+  // Natywnie
   function isWindow(obj) {
     return obj !== null && obj !== undefined && obj === obj.window;
   }
@@ -830,43 +789,45 @@ IE9+ 请使用 [github/fetch](http://github.com/github/fetch)，IE8+ 请使用 [
 
   + inArray
 
-  在数组中搜索指定值并返回索引 (找不到则返回 -1)。
+  Szuka podanej wartości wewnątrz tablicy i zwraca jej indeks (lub -1 jeżeli nie znaleziono).
 
   ```js
   // jQuery
   $.inArray(item, array);
 
-  // Native
+  // Natywnie
   array.indexOf(item) > -1;
 
-  // ES6-way
+  // sposób ES6
   array.includes(item);
   ```
 
   + isNumeric
 
-  检测传入的参数是不是数字。
-  Use `typeof` to decide the type or the `type` example for better accuracy.
+  Sprawdza czy podany argument jest wartością numeryczną.
+  Użyj `typeof` by sprawdzić typ lub przykładu `type` dla większej dokładności.
 
   ```js
   // jQuery
   $.isNumeric(item);
 
-  // Native
-  function isNumeric(n) {
-    return !isNaN(parseFloat(n)) && isFinite(n);
+  // Natywnie
+  function isNumeric(value) {
+    var type = typeof value;
+
+    return (type === 'number' || type === 'string') && !Number.isNaN(value - Number.parseFloat(value));
   }
   ```
 
   + isFunction
 
-  检测传入的参数是不是 JavaScript 函数对象。
+  Sprawdza czy podany argument jest obiektem funkcji.
 
   ```js
   // jQuery
   $.isFunction(item);
 
-  // Native
+  // Natywnie
   function isFunction(item) {
     if (typeof item === 'function') {
       return true;
@@ -878,13 +839,13 @@ IE9+ 请使用 [github/fetch](http://github.com/github/fetch)，IE8+ 请使用 [
 
   + isEmptyObject
 
-  检测对象是否为空 (包括不可枚举属性).
+  Sprawdza czy obiekt jest pusty (nie posiada żadnych wymiernych atrybutów).
 
   ```js
   // jQuery
   $.isEmptyObject(obj);
 
-  // Native
+  // Natywnie
   function isEmptyObject(obj) {
     return Object.keys(obj).length === 0;
   }
@@ -892,13 +853,13 @@ IE9+ 请使用 [github/fetch](http://github.com/github/fetch)，IE8+ 请使用 [
 
   + isPlainObject
 
-  检测是不是扁平对象 (使用 “{}” 或 “new Object” 创建).
+  Sprawdza czy obiekt jest prostym obiektem (stworzonym przy pomocy “{}” lub “new Object”).
 
   ```js
   // jQuery
   $.isPlainObject(obj);
 
-  // Native
+  // Natywnie
   function isPlainObject(obj) {
     if (typeof (obj) !== 'object' || obj.nodeType || obj !== null && obj !== undefined && obj === obj.window) {
       return false;
@@ -915,80 +876,80 @@ IE9+ 请使用 [github/fetch](http://github.com/github/fetch)，IE8+ 请使用 [
 
   + extend
 
-  合并多个对象的内容到第一个对象。
-  object.assign 是 ES6 API，也可以使用 [polyfill](https://github.com/ljharb/object.assign)。
+  Scalenie zawartości dwóch lub większej ilości obiektów razem w pierwszy obiekt.
+  `Object.assign` należy do API ES6, więc można również użyć [wypełnienia](https://github.com/ljharb/object.assign).
 
   ```js
   // jQuery
   $.extend({}, defaultOpts, opts);
 
-  // Native
+  // Natywnie
   Object.assign({}, defaultOpts, opts);
   ```
 
   + trim
 
-  移除字符串头尾空白。
+  Usuwa białe znaki z początku i końca ciągu znaków.
 
   ```js
   // jQuery
   $.trim(string);
 
-  // Native
+  // Natywnie
   string.trim();
   ```
 
   + map
 
-  将数组或对象转化为包含新内容的数组。
+  Przekształcenie wszystkich elementów tablicy lub obiektu w nową tablicę.
 
   ```js
   // jQuery
   $.map(array, (value, index) => {
   });
 
-  // Native
+  // Natywnie
   array.map((value, index) => {
   });
   ```
 
   + each
 
-  轮询函数，可用于平滑的轮询对象和数组。
+  Ogólna funkcja do iteracji, która może być użyta zarówno na obiektach jak i tablicach.
 
   ```js
   // jQuery
   $.each(array, (index, value) => {
   });
 
-  // Native
+  // Natywnie
   array.forEach((value, index) => {
   });
   ```
 
   + grep
 
-  找到数组中符合过滤函数的元素。
+  Zwraca elementy które przechodzą test podanej funkcji filtrującej.
 
   ```js
   // jQuery
   $.grep(array, (value, index) => {
   });
 
-  // Native
+  // Natywnie
   array.filter((value, index) => {
   });
   ```
 
   + type
 
-  检测对象的 JavaScript [Class] 内部类型。
+  Ustala wewnętrzną klasę obiektu.
 
   ```js
   // jQuery
   $.type(obj);
 
-  // Native
+  // Natywnie
   function type(item) {
     const reTypeOf = /(?:^\[object\s(.*?)\]$)/;
     return Object.prototype.toString.call(item)
@@ -999,87 +960,79 @@ IE9+ 请使用 [github/fetch](http://github.com/github/fetch)，IE8+ 请使用 [
 
   + merge
 
-  合并第二个数组内容到第一个数组。
+  Scala zawartość dwóch tablic w jedną.
 
   ```js
   // jQuery
   $.merge(array1, array2);
 
-  // Native
-  // 使用 concat，不能去除重复值
+  // Natywnie
+  // Funkcja concat nie usuwa duplikatów.
   function merge(...args) {
     return [].concat(...args)
-  }
-
-  // ES6，同样不能去除重复值
-  array1 = [...array1, ...array2]
-
-  // 使用 Set，可以去除重复值
-  function merge(...args) {
-    return Array.from(new Set([].concat(...args)))
   }
   ```
 
   + now
 
-  返回当前时间的数字呈现。
+  Zwraca liczbę reprezentującą bieżący czas.
 
   ```js
   // jQuery
   $.now();
 
-  // Native
+  // Natywnie
   Date.now();
   ```
 
   + proxy
 
-  传入函数并返回一个新函数，该函数绑定指定上下文。
+  Pobiera funkcję jako argument i zwraca nową funkcję, która będzie miała zawsze określony kontekst.
 
   ```js
   // jQuery
   $.proxy(fn, context);
 
-  // Native
+  // Natywnie
   fn.bind(context);
   ```
 
   + makeArray
 
-  类数组对象转化为真正的 JavaScript 数组。
+  Konwertuje obiekt tablico-podobny w tablicę.
 
   ```js
   // jQuery
   $.makeArray(arrayLike);
 
-  // Native
+  // Natywnie
   Array.prototype.slice.call(arrayLike);
 
-  // ES6-way
+  // sposób ES6
   Array.from(arrayLike);
   ```
 
-- [6.2](#6.2) <a name='6.2'></a> 包含
+- [6.2](#6.2) <a name='6.2'></a> Zawieranie
 
-  检测 DOM 元素是不是其他 DOM 元素的后代.
+  Sprawdza czy dany element DOM jest potomkiem innego elementu DOM.
 
   ```js
   // jQuery
   $.contains(el, child);
 
-  // Native
+  // Natywnie
   el !== child && el.contains(child);
   ```
 
-- [6.3](#6.3) <a name='6.3'></a> Globaleval
+- [6.3](#6.3) <a name='6.3'></a> Globalna ewaluacja
 
-  全局执行 JavaScript 代码。
+  Wykonuje kod Javascript z globalnym kontekstem.
 
   ```js
   // jQuery
   $.globaleval(code);
 
-  // Native
+  // Natywnie
   function Globaleval(code) {
     const script = document.createElement('script');
     script.text = code;
@@ -1087,26 +1040,26 @@ IE9+ 请使用 [github/fetch](http://github.com/github/fetch)，IE8+ 请使用 [
     document.head.appendChild(script).parentNode.removeChild(script);
   }
 
-  // Use eval, but context of eval is current, context of $.Globaleval is global.
+  // Używaj eval, chociaż kontekst eval jest lokalny, a kontekst $.Globaleval jest globalny.
   eval(code);
   ```
 
-- [6.4](#6.4) <a name='6.4'></a> 解析
+- [6.4](#6.4) <a name='6.4'></a> parse
 
   + parseHTML
 
-  解析字符串为 DOM 节点数组.
+  Przetwarza łańcuch znaków w tablicę węzłów DOM.
 
   ```js
   // jQuery
   $.parseHTML(htmlString);
 
-  // Native
+  // Natywnie
   function parseHTML(string) {
     const context = document.implementation.createHTMLDocument();
 
-    // Set the base href for the created document so any parsed elements with URLs
-    // are based on the document's URL
+    // Ustaw href elementu na stworzony dokument, żeby przetworzone elementy z URL
+    // były oparte o URL dokumentu
     const base = context.createElement('base');
     base.href = document.location.href;
     context.head.appendChild(base);
@@ -1118,50 +1071,50 @@ IE9+ 请使用 [github/fetch](http://github.com/github/fetch)，IE8+ 请使用 [
 
   + parseJSON
 
-  传入格式正确的 JSON 字符串并返回 JavaScript 值.
+  Pobiera ciąg znaków reprezentujący JSON i zwraca wynikową wartość Javascript.
 
   ```js
   // jQuery
   $.parseJSON(str);
 
-  // Native
+  // Natywnie
   JSON.parse(str);
   ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ powrót](#spis-treści)**
 
-## Promises
+## Obietnice
 
-Promise 代表异步操作的最终结果。jQuery 用它自己的方式处理 promises，原生 JavaScript 遵循 [Promises/A+](http://promises-aplus.github.io/promises-spec/) 标准实现了最小 API 来处理 promises。
+Obietnice (_ang. Promises_) reprezentują ewentualny wynik asynchronicznej operacji. jQuery posiada własny system zarządzania obietnicami. Natywny Javascript implementuje minimalną warstwę API do obsługi obietnic według specyfikacji [Promises/A+](http://promises-aplus.github.io/promises-spec/).
 
 - [7.1](#7.1) <a name='7.1'></a> done, fail, always
 
-  `done` 会在 promise 解决时调用，`fail` 会在 promise 拒绝时调用，`always` 总会调用。
+  `done` jest wywoływane gdy obietnica zostanie zakończona sukcesem, `fail` jest wywoływane gdy obietnica jest odrzucona, `always` gdy obietnica jest zakończona z dowolnym wynikiem.
 
   ```js
   // jQuery
   $promise.done(doneCallback).fail(failCallback).always(alwaysCallback)
 
-  // Native
+  // Natywnie
   promise.then(doneCallback, failCallback).then(alwaysCallback, alwaysCallback)
   ```
 
 - [7.2](#7.2) <a name='7.2'></a> when
 
-  `when` 用于处理多个 promises。当全部 promises 被解决时返回，当任一 promise 被拒绝时拒绝。
+  `when` wykorzystuje się do obsługi wielu obietnic jednocześnie. Zakończy się sukcesem, jeżeli wszystkie podane obietnice zostaną również zakończone sukcesem; zakończy się odrzuceniem, jeżeli jakakolwiek z obietnic zostanie odrzucona.
 
   ```js
   // jQuery
   $.when($promise1, $promise2).done((promise1Result, promise2Result) => {
   });
 
-  // Native
+  // Natywnie
   Promise.all([$promise1, $promise2]).then([promise1Result, promise2Result] => {});
   ```
 
 - [7.3](#7.3) <a name='7.3'></a> Deferred
 
-  Deferred 是创建 promises 的一种方式。
+  Deferred (_pl. Odłożenie_) jest metodą tworzenia obietnic.
 
   ```js
   // jQuery
@@ -1178,7 +1131,7 @@ Promise 代表异步操作的最终结果。jQuery 用它自己的方式处理 p
     return defer.promise();
   }
 
-  // Native
+  // Natywnie
   function asyncFunc() {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -1191,7 +1144,7 @@ Promise 代表异步操作的最终结果。jQuery 用它自己的方式处理 p
     });
   }
 
-  // Deferred way
+  // sposób z Deferred
   function defer() {
     const deferred = {};
     const promise = new Promise((resolve, reject) => {
@@ -1220,32 +1173,32 @@ Promise 代表异步操作的最终结果。jQuery 用它自己的方式处理 p
   }
   ```
 
-**[⬆ 回到顶部](#目录)**
+**[⬆ powrót](#spis-treści)**
 
-## Animation
+## Animacja
 
-- [8.1](#8.1) <a name='8.1'></a> Show & Hide
+- [8.1](#8.1) <a name='8.1'></a> Show i Hide
 
   ```js
   // jQuery
   $el.show();
   $el.hide();
 
-  // Native
-  // 更多 show 方法的细节详见 https://github.com/oneuijs/oui-dom-utils/blob/master/src/index.js#L363
+  // Natywnie
+  // Po więcej szczegółów o tej metodzie odnieś się do https://github.com/oneuijs/oui-dom-utils/blob/master/src/index.js#L363
   el.style.display = ''|'inline'|'inline-block'|'inline-table'|'block';
   el.style.display = 'none';
   ```
 
 - [8.2](#8.2) <a name='8.2'></a> Toggle
 
-  显示或隐藏元素。
+  Wyświetla lub ukrywa element.
 
   ```js
   // jQuery
   $el.toggle();
 
-  // Native
+  // Natywnie
   if (el.ownerDocument.defaultView.getComputedStyle(el, null).display === 'none') {
     el.style.display = ''|'inline'|'inline-block'|'inline-table'|'block';
   } else {
@@ -1253,42 +1206,42 @@ Promise 代表异步操作的最终结果。jQuery 用它自己的方式处理 p
   }
   ```
 
-- [8.3](#8.3) <a name='8.3'></a> FadeIn & FadeOut
+- [8.3](#8.3) <a name='8.3'></a> FadeIn i FadeOut
 
   ```js
   // jQuery
   $el.fadeIn(3000);
   $el.fadeOut(3000);
 
-  // Native
+  // Natywnie
   el.style.transition = 'opacity 3s';
-  // fadeIn
+  // FadeIn
   el.style.opacity = '1';
-  // fadeOut
+  // FadeOut
   el.style.opacity = '0';
   ```
 
 - [8.4](#8.4) <a name='8.4'></a> FadeTo
 
-  调整元素透明度。
+  Dostosowuje przezroczystość elementu w czasie.
 
   ```js
   // jQuery
   $el.fadeTo('slow',0.15);
-  // Native
-  el.style.transition = 'opacity 3s'; // 假设 'slow' 等于 3 秒
+  // Natywnie
+  el.style.transition = 'opacity 3s'; // przyjęto że 'slow' trwa 3 sekundy
   el.style.opacity = '0.15';
   ```
 
 - [8.5](#8.5) <a name='8.5'></a> FadeToggle
 
-  动画调整透明度用来显示或隐藏。
+  Wyświetla lub ukrywa element przez animowanie jego przezroczystości.
 
   ```js
   // jQuery
   $el.fadeToggle();
 
-  // Native
+  // Natywnie
   el.style.transition = 'opacity 3s';
   const { opacity } = el.ownerDocument.defaultView.getComputedStyle(el, null);
   if (opacity === '1') {
@@ -1298,14 +1251,14 @@ Promise 代表异步操作的最终结果。jQuery 用它自己的方式处理 p
   }
   ```
 
-- [8.6](#8.6) <a name='8.6'></a> SlideUp & SlideDown
+- [8.6](#8.6) <a name='8.6'></a> SlideUp i SlideDown
 
   ```js
   // jQuery
   $el.slideUp();
   $el.slideDown();
 
-  // Native
+  // Natywnie
   const originHeight = '100px';
   el.style.transition = 'height 3s';
   // slideUp
@@ -1316,13 +1269,13 @@ Promise 代表异步操作的最终结果。jQuery 用它自己的方式处理 p
 
 - [8.7](#8.7) <a name='8.7'></a> SlideToggle
 
-  滑动切换显示或隐藏。
+  Wyświetla lub ukrywa element przez przesunięcie.
 
   ```js
   // jQuery
   $el.slideToggle();
 
-  // Native
+  // Natywnie
   const originHeight = '100px';
   el.style.transition = 'height 3s';
   const { height } = el.ownerDocument.defaultView.getComputedStyle(el, null);
@@ -1330,39 +1283,37 @@ Promise 代表异步操作的最终结果。jQuery 用它自己的方式处理 p
     el.style.height = originHeight;
   }
   else {
-   el.style.height = '0px';
+    el.style.height = '0px';
   }
   ```
 
 - [8.8](#8.8) <a name='8.8'></a> Animate
 
-  执行一系列 CSS 属性动画。
+  Wykonuje własną animację zbioru atrybutów CSS.
 
   ```js
   // jQuery
   $el.animate({ params }, speed);
 
-  // Native
+  // Natywnie
   el.style.transition = 'all ' + speed;
   Object.keys(params).forEach((key) =>
     el.style[key] = params[key];
   )
   ```
 
-**[⬆ 回到顶部](#目录)**
+## Alternatywy
 
-## Alternatives
+* [You Might Not Need jQuery](http://youmightnotneedjquery.com/) - Przykłady wykonania powszechnych zdarzeń, elementów, ajax itd. z użyciem zwykłego Javascript.
+* [npm-dom](http://github.com/npm-dom) oraz [webmodules](http://github.com/webmodules) - Indywidualne moduły DOM na NPM.
 
-* [你可能不需要 jQuery (You Might Not Need jQuery)](http://youmightnotneedjquery.com/) - 如何使用原生 JavaScript 实现通用事件，元素，ajax 等用法。
-* [npm-dom](http://github.com/npm-dom) 以及 [webmodules](http://github.com/webmodules) - 在 NPM 上提供独立 DOM 模块的组织
-
-## Browser Support
+## Wsparcie przeglądarek
 
 ![Chrome][chrome-image] | ![Firefox][firefox-image] | ![IE][ie-image] | ![Opera][opera-image] | ![Safari][safari-image]
 --- | --- | --- | --- | --- |
 Latest ✔ | Latest ✔ | 10+ ✔ | Latest ✔ | 6.1+ ✔ |
 
-# License
+# Licencja
 
 MIT
 
